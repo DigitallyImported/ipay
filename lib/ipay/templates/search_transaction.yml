@@ -1,0 +1,17 @@
+:account_id:
+:account_namespace:
+  :login_id:
+  :external_group_id:
+  :provider_id:
+:transaction_type:
+:further_action:
+:payment_method:
+:transaction_token:
+:start_date:
+  :date: &date
+    :year:
+    :month:
+    :day:
+:expiry_date:
+  :date: *date
+:status:

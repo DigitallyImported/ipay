@@ -1,0 +1,9 @@
+:account_id:
+:account_namespace:
+  :login_id:
+  :external_group_id:
+  :provider_id:
+:service_id:
+:event_start_time:
+:event_end_time:
+:quantity:

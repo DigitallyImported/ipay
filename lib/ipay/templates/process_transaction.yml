@@ -1,0 +1,38 @@
+:account_id:
+:account_namespace:
+  :login_id:
+  :external_group_id:
+  :provider_id:
+:transaction_type:
+:amount:
+:monexa_transaction_id:
+:transaction_token:
+:payment_information:
+  :payment_method:
+  :credit_card_information:
+    :credit_card_number:
+    :name_on_credit_card:
+    :credit_card_expiry_date:
+  :bank_account_information:
+    :name_of_bank:
+    :bank_account_number:
+    :transit_number:
+    :routing_number:
+    :ecp_authorization:
+  :paypal_information:
+    :reference_id:
+    :reference_id_last_update_date:
+      :date:
+        :year:
+        :month:
+        :day:
+  :bill_to_address:
+    :address:
+      :address_1:
+      :address_2:
+      :address_3:
+      :address_4:
+      :city:
+      :state_or_province:
+      :zip_or_postal_code:
+      :country:

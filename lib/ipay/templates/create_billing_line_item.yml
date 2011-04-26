@@ -1,0 +1,13 @@
+:account_id:
+:account_namespace:
+  :login_id:
+  :external_group_id:
+  :provider_id:
+:product_id:
+:description:
+:amount:
+:line_item_date:
+  :date:
+    :year:
+    :month:
+    :day:
