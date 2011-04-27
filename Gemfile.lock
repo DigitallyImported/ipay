@@ -1,0 +1,16 @@
+PATH
+  remote: .
+  specs:
+    ipay (0.0.1)
+      libxml-ruby
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    libxml-ruby (2.0.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ipay!
