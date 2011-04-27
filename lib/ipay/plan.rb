@@ -1,4 +1,4 @@
-module IPaya
+module IPay
   module Plan
     def self.list(data)
       api_request :list_plans, data

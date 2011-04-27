@@ -5,22 +5,11 @@ require 'yaml'
 module IPay  
   class Request
     
-    def initialize(command, data = {})
-      @command = command.to_s.split('_').collect{|w| w.upcase}.join('_')
-      IPay::log.info "API request: #{@command}"
+    def initialize(data = {})
+      @data = data
+      IPay::log.debug "Request Args: #{(@data.collect { |k, v| "#{k}=#{v}" }.join(','))}"
       
-      begin
-        template = File.join(File.dirname(__FILE__), 'templates', "#{command.downcase}.yml")
-        IPay::log.debug "Loading request template #{template}"
-        @data = reorder(data, YAML.load_file(template))
-      rescue
-        IPay::log.debug 'Failed to load template.'
-        @data = data
-      end
-      
-      IPay::log.debug "Request Args: #{(@data.collect { |k, v| "#{k}=#{v}" }.join(','))}" if @data.length > 0
-      
-      @xml = build_xml("<#{@command}>#{IPay::Util.hash_to_xml(@data)}</#{@command}>")
+      @xml = build_xml IPay::Util.hash_to_xml(@data)
       IPay::log.debug @xml
     end
     
@@ -53,20 +42,23 @@ module IPay
       req = Net::HTTP::Post.new(url.path)
       req.body = data
       
-      res = http.start { |http| http.request(req) }
+      begin
+        res = http.start { |http| http.request(req) }
+      rescue EOFError
+        raise ResponseError.new('Incomplete response from server')
+      end
       res.body
     end
     
-    def build_xml(command_xml)
-      "<ip_applications_API><api_version>1.0</api_version>
-  		<Request>
-  			<Authentication>
-  				<administrator_login_name>#{IPay::config.username}</administrator_login_name>
-  				<password>#{IPay::config.password}</password>
-  			</Authentication>
-  			<Command>#{command_xml}</Command>
-  		</Request>
-  		</ip_applications_API>"
+    def build_xml(fields_xml)      
+      "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+      <REQUEST KEY=\"#{IPay::config.company_key}\" PROTOCOL=\"1\" FMT=\"1\" ENCODING=\"0\">
+        <TRANSACTION>
+          <FIELDS>
+            #{fields_xml}
+          </FIELDS>
+        </TRANSACTION>
+      </REQUEST>"
     end
 
     def reorder(orig, template)

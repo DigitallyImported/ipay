@@ -1,7 +1,7 @@
 require 'yaml'
 require 'ostruct'
 
-module IPaya
+module IPay
   
   def self.config_file
     File.expand_path(File.join(ROOT, 'config', CONFIG_NAME))

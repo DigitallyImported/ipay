@@ -1,19 +1,14 @@
 require 'xml'
+require 'date'
 
 module IPay
   class Response
 
-    STATUS_REGEX = {
-      :success => '0([0-9]{3})',
-      :error => '1([0-9])([0-9]{2})',
-      :fatal => '2([0-9]{3})'
-    }
-
-    attr_reader :status, :data, :raw_xml
+    attr_reader :status, :server_time, :data, :raw_xml
     
     def initialize(xml)
       if IPay::config.dry_run
-        @status = {:code => '0000', :description => 'Dry Run, no response processed'}
+        @status = {:arc => '00', :mrc => '00', :description => 'Dry Run, no response processed'}
       else
         @raw_xml = xml
         parse_response @raw_xml
@@ -21,20 +16,11 @@ module IPay
     end
     
     def success?
-      @status[:code].match(STATUS_REGEX[:success]) != nil
-    end
-    
-    def warning?
-      m = @status[:code].match(STATUS_REGEX[:success])
-      m && m[1].to_i > 0
+      @status[:arc] == '00' && @status['mrc'] == '00'
     end
     
     def error?
-      @status[:code].match(STATUS_REGEX[:error]) != nil
-    end
-    
-    def fatal?
-      @status[:code].match(STATUS_REGEX[:fatal]) != nil
+      not success?
     end
     
     private
@@ -45,26 +31,25 @@ module IPay
       parser.context.options = XML::Parser::Options::NOBLANKS | XML::Parser::Options::NOERROR |
                                XML::Parser::Options::RECOVER | XML::Parser::Options::NOWARNING
       
-      response = xml_node_to_hash(parser.parse.find('//Response')[0])
-      raise ResponseError.new 'Invalid response from server' unless response and response.include? :status
-      IPay::log.info "Response status: #{response[:status][:description]} (#{response[:status][:code]})"
-      IPay::log.debug response
+      response = xml_node_to_hash(parser.parse.find('//RESPONSE/RESPONSE/FIELDS')[0])
+      raise ResponseError.new 'Invalid response from server' unless response and response.include? :arc
       
-      @status = response[:status]
-      @data   = response[:data].values[0] if response.has_key? :data
+      d = response.delete(:local_date).match(/([0-9]{2})([0-9]{2})([0-9]{4})/)
+      t = response.delete(:local_time).match(/([0-9]{2})([0-9]{2})([0-9]{2})/)
+
+      @server_time = DateTime.parse("#{d[3]}-#{d[1]}-#{d[2]}T#{t[1]}:#{t[2]}:#{t[3]}") rescue DateTime.now
+      @status = { :arc => response.delete(:arc), :mrc => response.delete(:mrc), :description => response.delete(:response_text) }
+      @data = response
+      
+      IPay::log.info "ARC=#{response[:arc]}, MRC=#{response[:mrc]}, RESPONSE_TEXT=#{response[:response_text]}"
+      IPay::log.debug response
     end
     
     def xml_node_to_hash(node)
       result = {}
       if node.element? && node.children? && node.children[0].element?
         node.children.each do |child|
-          sym_name = child.name.downcase.sub('response_', '').to_sym
-          if result.include? sym_name
-            result[sym_name] = [result[sym_name]] unless result[sym_name].is_a? Array
-            result[sym_name].push xml_node_to_hash(child)
-          else
-            result[sym_name] = xml_node_to_hash(child)
-          end
+          result[child.name.downcase.to_sym] = xml_node_to_hash(child)
         end
         result
       else

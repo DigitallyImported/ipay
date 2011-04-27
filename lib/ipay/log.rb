@@ -1,5 +1,5 @@
 require 'logger'
-module IPaya
+module IPay
   class Log < Logger
     def format_message(severity, timestamp, progname, msg)
       "#{timestamp} #{severity} -- #{msg}\n" 
