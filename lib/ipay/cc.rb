@@ -9,5 +9,6 @@ module IPay
     end
     
     autoload :Debit, 'ipay/cc/debit'
+    autoload :Credit, 'ipay/cc/credit'
   end
 end

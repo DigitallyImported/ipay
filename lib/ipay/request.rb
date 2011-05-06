@@ -46,7 +46,7 @@ module IPay
       res.body
       
       rescue EOFError
-        raise ResponseError.new('Unable to send your request or the request was rejected by the server.')
+        raise RequestError.new('Unable to send your request or the request was rejected by the server.')
     end
 
     def build_xml(fields_xml)      

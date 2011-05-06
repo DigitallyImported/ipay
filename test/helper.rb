@@ -1,5 +1,6 @@
 require 'ipay'
 require 'test/unit'
+require 'date'
 
 class Test::Unit::TestCase
   def self.test(string, &block)

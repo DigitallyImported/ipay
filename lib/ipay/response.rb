@@ -43,6 +43,7 @@ module IPay
       
       IPay::log.info "ARC=#{@status[:arc]}, MRC=#{@status[:mrc]}, RESPONSE_TEXT=#{@status[:description]}"
       IPay::log.debug response
+      raise RequestTimeout.new(@status[:description]) if @status[:arc] == 'TO'
     end
     
     def xml_node_to_hash(node)

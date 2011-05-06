@@ -5,6 +5,7 @@ module IPay
   LOG_NAME    = 'ipay.log'
   
   autoload :CC, 'ipay/cc'
+  autoload :Wallet, 'ipay/wallet'
   autoload :Network, 'ipay/network'
 end
 
