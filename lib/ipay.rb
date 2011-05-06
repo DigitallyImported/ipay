@@ -4,12 +4,11 @@ module IPay
   CONFIG_NAME = 'ipay.yml'
   LOG_NAME    = 'ipay.log'
   
-  ApiError      = Class.new(RuntimeError)
-  RequestError  = Class.new(ApiError)
-  ResponseError = Class.new(ApiError)
+  autoload :CC, 'ipay/cc'
+  autoload :Network, 'ipay/network'
 end
 
 $:.unshift(File.dirname(__FILE__))
-%w[ version config log util request response api ].each do |file|
+%w[ version config log util errors api_constants request response api_request ].each do |file|
   require "ipay/#{file}"
 end

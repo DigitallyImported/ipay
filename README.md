@@ -8,7 +8,7 @@ Changelog
 
 **v0.0.1**
 
-- Initial commit, checks ipay network status
+- Initial commit
 
 Setup
 -----
@@ -17,11 +17,10 @@ Create a configuration file 'ipay.yml' and place it in your apps config/ folder.
 
 Example configuration:
 
-	:url: "https://api.monexa.com/v05_24/XML/monexa_xml.cgi"
-	:username: "API_USERNAME"
-	:password: "API_PASSWORD"
-	:provider_id: "YOUR_PROVIDER_ID"
-	:office_id: "YOUR_OFFICE_ID"
+	:url: "https://uap.txngw.com/"
+	:company_key: 6990
+	:terminal_id: 6177
+	:pin: 1234
 
 Dependencies
 ----
@@ -31,6 +30,7 @@ Dependencies
 Usage
 ----
 	require 'ipay'
-	response = IPay::ping
+	response = IPay::Network::Status.query
 	puts response.success?
-	puts response.data[:version]
+	puts response.server_time
+	puts response.data

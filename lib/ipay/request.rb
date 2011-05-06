@@ -42,41 +42,23 @@ module IPay
       req = Net::HTTP::Post.new(url.path)
       req.body = data
       
-      begin
-        res = http.start { |http| http.request(req) }
-      rescue EOFError
-        raise ResponseError.new('Incomplete response from server')
-      end
+      res = http.start { |http| http.request(req) }
       res.body
+      
+      rescue EOFError
+        raise ResponseError.new('Unable to send your request or the request was rejected by the server.')
     end
-    
+
     def build_xml(fields_xml)      
-      "<?xml version=\"1.0\" encoding=\"utf-8\"?>
-      <REQUEST KEY=\"#{IPay::config.company_key}\" PROTOCOL=\"1\" FMT=\"1\" ENCODING=\"0\">
+      "<REQUEST KEY=\"#{IPay::config.company_key}\" PROTOCOL=\"1\" FMT=\"1\" ENCODING=\"0\">
         <TRANSACTION>
           <FIELDS>
-            #{fields_xml}
-          </FIELDS>
+            <TERMINAL_ID>#{IPay::config.terminal_id}</TERMINAL_ID>
+            <PIN>#{IPay::config.pin}</PIN>
+            #{fields_xml}</FIELDS>
         </TRANSACTION>
       </REQUEST>"
     end
-
-    def reorder(orig, template)
-      new_h = {}
-      template.each { |k, v|
-        next unless orig.has_key? k
-        if v.is_a? Hash
-          if orig[k].is_a? Array
-            new_h[k] = orig[k].collect { |group| reorder(group, template[k]) }
-          else
-            new_h[k] = reorder(orig[k], template[k])
-          end
-        else
-          new_h[k] = orig[k]
-        end
-      }
-      new_h
-    end
-    
+     
   end
 end

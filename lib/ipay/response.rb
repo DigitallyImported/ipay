@@ -16,7 +16,7 @@ module IPay
     end
     
     def success?
-      @status[:arc] == '00' && @status['mrc'] == '00'
+      @status[:arc] == '00' && @status[:mrc] == '00'
     end
     
     def error?
@@ -41,7 +41,7 @@ module IPay
       @status = { :arc => response.delete(:arc), :mrc => response.delete(:mrc), :description => response.delete(:response_text) }
       @data = response
       
-      IPay::log.info "ARC=#{response[:arc]}, MRC=#{response[:mrc]}, RESPONSE_TEXT=#{response[:response_text]}"
+      IPay::log.info "ARC=#{@status[:arc]}, MRC=#{@status[:mrc]}, RESPONSE_TEXT=#{@status[:description]}"
       IPay::log.debug response
     end
     
