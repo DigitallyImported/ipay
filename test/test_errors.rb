@@ -16,9 +16,7 @@ class TestErrors < Test::Unit::TestCase
       :city => 'coram', 
       :state => 'NY', 
       :postal_code => '11727', 
-      :country => 826,
-      :operator => 'AudioAddict', 
-      :verbose_response => 1
+      :country => 826
     )
   
     assert resp.error?
@@ -40,9 +38,7 @@ class TestErrors < Test::Unit::TestCase
         :city => 'coram', 
         :state => 'NY', 
         :postal_code => '11727', 
-        :country => 826,
-        :operator => 'AudioAddict', 
-        :verbose_response => 1
+        :country => 826
       )
     end
       

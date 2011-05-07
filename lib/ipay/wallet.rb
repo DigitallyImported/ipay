@@ -7,5 +7,6 @@ module IPay
     end
     
     autoload :Client, 'ipay/wallet/client'
+    autoload :Account, 'ipay/wallet/account'
   end
 end

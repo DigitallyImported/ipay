@@ -5,9 +5,16 @@ require 'yaml'
 module IPay  
   class Request
     
+    CONFIG_GLOBALS = [:operator, :terminal_id, :pin, :verbose_response]
+    
     def initialize(data = {})
       @data = data
       IPay::log.debug "Request Args: #{(@data.collect { |k, v| "#{k}=#{v}" }.join(','))}"
+      
+      CONFIG_GLOBALS.each do |key|
+        next if @data.include?(key)
+        @data[key] = IPay::config.send(key) if IPay::config.respond_to?(key)
+      end
       
       @xml = build_xml IPay::Util.hash_to_xml(@data)
       IPay::log.debug @xml
@@ -52,10 +59,7 @@ module IPay
     def build_xml(fields_xml)      
       "<REQUEST KEY=\"#{IPay::config.company_key}\" PROTOCOL=\"1\" FMT=\"1\" ENCODING=\"0\">
         <TRANSACTION>
-          <FIELDS>
-            <TERMINAL_ID>#{IPay::config.terminal_id}</TERMINAL_ID>
-            <PIN>#{IPay::config.pin}</PIN>
-            #{fields_xml}</FIELDS>
+          <FIELDS>#{fields_xml}</FIELDS>
         </TRANSACTION>
       </REQUEST>"
     end
