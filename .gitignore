@@ -3,3 +3,4 @@
 config
 *.log
 *.gem
+*.xml
