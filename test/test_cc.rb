@@ -40,6 +40,8 @@ class TestCC < Test::Unit::TestCase
     assert resp.success?
     assert resp.data.include?(:transaction_id)
     
+    sleep(3)
+    
     resp = IPay::CC::Debit.capture(
       :amount => '4.99', 
       :transaction_id => resp.data[:transaction_id]
@@ -65,7 +67,9 @@ class TestCC < Test::Unit::TestCase
     
     assert resp.success?
     assert resp.data.include?(:transaction_id)
-
+    
+    sleep(3)
+    
     resp = IPay::CC::Debit.void(
       :transaction_id => resp.data[:transaction_id]
     )
@@ -109,7 +113,9 @@ class TestCC < Test::Unit::TestCase
     
     assert resp.success?
     assert resp.data.include?(:transaction_id)
-
+    
+    sleep(3)
+    
     resp = IPay::CC::Credit.void(
       :transaction_id => resp.data[:transaction_id]
     )

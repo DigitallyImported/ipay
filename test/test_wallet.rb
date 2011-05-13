@@ -45,7 +45,7 @@ class TestWallet < Test::Unit::TestCase
     assert resp.data.include?(:transaction_id)
     assert resp.data.include?(:client_id)
     
-    sleep(1)
+    sleep(3)
     
     resp = IPay::Wallet::Client.modify(
       :client_id => resp.data[:client_id],
@@ -76,7 +76,7 @@ class TestWallet < Test::Unit::TestCase
     assert resp.data.include?(:transaction_id)
     assert resp.data.include?(:client_id)
     
-    sleep(1)
+    sleep(3)
     
     resp = IPay::Wallet::Client.delete(
       :client_id => resp.data[:client_id]
@@ -107,7 +107,7 @@ class TestWallet < Test::Unit::TestCase
     assert resp.data.include?(:transaction_id)
     assert resp.data.include?(:client_id)
     
-    sleep(1)
+    sleep(3)
     
     resp = IPay::Wallet::Account.insert(
       :account => 'CC',
@@ -141,7 +141,7 @@ class TestWallet < Test::Unit::TestCase
     assert resp.data.include?(:transaction_id)
     assert resp.data.include?(:client_id)
     
-    sleep(1)
+    sleep(3)
     
     resp = IPay::Wallet::Account.modify(
       :account_id => resp.data[:account_id],
@@ -175,7 +175,7 @@ class TestWallet < Test::Unit::TestCase
     assert resp.data.include?(:transaction_id)
     assert resp.data.include?(:client_id)
     
-    sleep(1)
+    sleep(3)
     
     resp = IPay::Wallet::Account.insert(
       :account => 'CC',
@@ -188,7 +188,7 @@ class TestWallet < Test::Unit::TestCase
     assert resp.success?
     assert resp.data.include?(:transaction_id)
     
-    sleep(1)
+    sleep(3)
     
     resp = IPay::Wallet::Account.delete(
       :account_id => resp.data[:account_id]

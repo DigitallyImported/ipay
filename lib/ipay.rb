@@ -4,9 +4,9 @@ module IPay
   CONFIG_NAME = 'ipay.yml'
   LOG_NAME    = 'ipay.log'
   
-  autoload :CC, 'ipay/cc'
-  autoload :Wallet, 'ipay/wallet'
-  autoload :Network, 'ipay/network'
+  autoload :CC, 'ipay/api/cc'
+  autoload :Wallet, 'ipay/api/wallet'
+  autoload :Network, 'ipay/api/network'
 end
 
 $:.unshift(File.dirname(__FILE__))
