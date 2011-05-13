@@ -32,6 +32,8 @@ module IPay
   autoload :CC,       'ipay/cc'
   autoload :Wallet,   'ipay/wallet'
   autoload :Network,  'ipay/network'
+  
+  autoload :Certification, 'ipay/certification'
 end
 
 $:.unshift(File.dirname(__FILE__))

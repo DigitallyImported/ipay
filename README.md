@@ -6,6 +6,10 @@ Ruby gem for interfacing with the iPay XML API
 Changelog
 ---------
 
+**v0.1.1**
+
+- Added certification mode
+
 **v0.1.0**
 
 - CC (credit/debit) and Wallet (client/account) requests
@@ -14,6 +18,11 @@ Changelog
 **v0.0.1**
 
 - Initial commit
+
+Dependencies
+----
+
+- libxml-ruby for processing xml responses
 
 Setup
 -----
@@ -27,10 +36,14 @@ Example configuration:
 	:terminal_id: 6177
 	:pin: 1234
 
-Dependencies
-----
+You can also configure IPay via a block:
 
-- libxml-ruby for processing xml responses
+	IPay::config do |c|
+	  c.url = 'https://uap.txngw.com/'
+	  c.company_key = 6990
+	  c.terminal_id = 6177
+	  c.pin = 1234
+	end
 
 Usage
 ----
@@ -51,4 +64,13 @@ Usage
 
 	if resp.success?
 		puts resp.data[:transaction_id]
+	end
+
+Certification
+----
+
+IPay requires that test accounts submit an xml file of compiled responses before allowing an account to be used in production mode. The IPay gem has a certification mode that will compile all responses into the appropriate file/format for you automatically:
+
+	IPay::Certification.run do 
+		# ... all responses for api requests are now logged and saved when the block ends
 	end

@@ -32,8 +32,11 @@ module IPay
       IPay::log.debug 'Parsing response xml...'
       parser = XML::Parser.string xml
       parser.context.options = PARSER_OPT
+      parsed = parser.parse
     
-      response = xml_node_to_hash(parser.parse.find('//RESPONSE/RESPONSE/FIELDS')[0])
+      IPay::Certification.log(parsed) if IPay::config.certification
+    
+      response = xml_node_to_hash(parsed.find('//RESPONSE/RESPONSE/FIELDS')[0])
       raise ResponseError.new 'Invalid response from server' unless response and response.include? :arc
     
       d = response.delete(:local_date).match(/([0-9]{2})([0-9]{2})([0-9]{4})/)
@@ -46,7 +49,6 @@ module IPay
       IPay::log.info "ARC=#{@status[:arc]}, MRC=#{@status[:mrc]}, RESPONSE_TEXT=#{@status[:description]}"
       IPay::log.debug response
       raise RequestTimeout.new(@status[:description]) if @status[:arc] == 'TO'
-      IPay::Certification.log(xml) if IPay::config.certification
     end
   
     def xml_node_to_hash(node)
