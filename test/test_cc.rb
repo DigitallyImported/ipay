@@ -11,17 +11,17 @@ class TestCC < Test::Unit::TestCase
       :expiration => CC_EXP, 
       :first_name => 'nick', 
       :last_name => 'wilson',
-      :address => '123 fake &amp; woozle st', 
-      :city => 'coram', 
+      :address => '123 fake st', 
+      :city => 'sometown', 
       :state => 'NY', 
-      :postal_code => '11727', 
-      :country => 826
+      :postal_code => '90210', 
+      :country => IPay::Countries::USA
     )
     
     assert resp.success?
     assert resp.data.include?(:transaction_id)
   end
-  
+
   test 'debit capture and auth' do
     resp = IPay::CC::Debit.auth(
       :amount => '4.99', 
@@ -30,11 +30,11 @@ class TestCC < Test::Unit::TestCase
       :expiration => CC_EXP, 
       :first_name => 'nick', 
       :last_name => 'wilson',
-      :address => '123 fake &amp; woozle st', 
-      :city => 'coram', 
+      :address => '123 fake st', 
+      :city => 'sometown', 
       :state => 'NY', 
-      :postal_code => '11727', 
-      :country => 826
+      :postal_code => '90210', 
+      :country => IPay::Countries::USA
     )
     
     assert resp.success?
@@ -58,11 +58,11 @@ class TestCC < Test::Unit::TestCase
       :expiration => CC_EXP, 
       :first_name => 'nick', 
       :last_name => 'wilson',
-      :address => '123 fake &amp; woozle st', 
-      :city => 'coram', 
+      :address => '123 fake st', 
+      :city => 'sometown', 
       :state => 'NY', 
-      :postal_code => '11727', 
-      :country => 826
+      :postal_code => '90210', 
+      :country => IPay::Countries::USA
     )
     
     assert resp.success?
@@ -85,11 +85,11 @@ class TestCC < Test::Unit::TestCase
       :expiration => CC_EXP, 
       :first_name => 'nick', 
       :last_name => 'wilson',
-      :address => '123 fake &amp; woozle st', 
-      :city => 'coram', 
+      :address => '123 fake st', 
+      :city => 'sometown', 
       :state => 'NY', 
-      :postal_code => '11727', 
-      :country => 826
+      :postal_code => '90210', 
+      :country => IPay::Countries::USA
     )
     
     assert resp.success?
@@ -104,11 +104,11 @@ class TestCC < Test::Unit::TestCase
       :expiration => CC_EXP, 
       :first_name => 'nick', 
       :last_name => 'wilson',
-      :address => '123 fake &amp; woozle st', 
-      :city => 'coram', 
+      :address => '123 fake st', 
+      :city => 'sometown', 
       :state => 'NY', 
-      :postal_code => '11727', 
-      :country => 826
+      :postal_code => '90210', 
+      :country => IPay::Countries::USA
     )
     
     assert resp.success?

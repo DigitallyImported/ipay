@@ -6,6 +6,11 @@ Ruby gem for interfacing with the iPay XML API
 Changelog
 ---------
 
+**v0.1.0**
+
+- CC (credit/debit) and Wallet (client/account) requests
+- Tests
+
 **v0.0.1**
 
 - Initial commit
@@ -30,7 +35,20 @@ Dependencies
 Usage
 ----
 	require 'ipay'
-	response = IPay::Network::Status.query
-	puts response.success?
-	puts response.server_time
-	puts response.data
+	resp = IPay::CC::Debit.sale(
+		:amount => '4.99', 
+		:account_number => '4000009999999991',
+		:cvv => 123,
+		:expiration => '0614', 
+		:first_name => 'nick', 
+		:last_name => 'wilson',
+		:address => '123 fake st', 
+		:city => 'sometown', 
+		:state => 'NY', 
+		:postal_code => '90210', 
+		:country => IPay::Countries::USA
+	)
+
+	if resp.success?
+		puts resp.data[:transaction_id]
+	end

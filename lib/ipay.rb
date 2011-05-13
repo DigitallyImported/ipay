@@ -35,6 +35,6 @@ module IPay
 end
 
 $:.unshift(File.dirname(__FILE__))
-%w[ version config log ].each do |file|
+%w[ version config log countries ].each do |file|
   require "ipay/#{file}"
 end

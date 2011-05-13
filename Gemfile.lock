@@ -7,7 +7,7 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    libxml-ruby (2.0.2)
+    libxml-ruby (2.0.5)
 
 PLATFORMS
   ruby
