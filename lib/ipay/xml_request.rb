@@ -1,25 +1,26 @@
 require 'net/https'
 require 'uri'
 require 'yaml'
+require 'ipay/util'
 
-module IPay  
-  class Request
-    
+module IPay
+  class XmlRequest
+  
     CONFIG_GLOBALS = [:operator, :terminal_id, :pin, :verbose_response]
-    
+  
     def initialize(data = {})
       @data = data
       IPay::log.debug "Request Args: #{(@data.collect { |k, v| "#{k}=#{v}" }.join(','))}"
-      
+    
       CONFIG_GLOBALS.each do |key|
         next if @data.include?(key)
         @data[key] = IPay::config.send(key) if IPay::config.respond_to?(key)
       end
-      
-      @xml = build_xml IPay::Util.hash_to_xml(@data)
+    
+      @xml = build_xml Util::hash_to_xml(@data)
       IPay::log.debug @xml
     end
-    
+  
     def to_s
       @xml
     end
@@ -32,12 +33,12 @@ module IPay
 
     def do_post(api_url, data)
       IPay::log.debug "POST to #{api_url}"
-      
+    
       if IPay::config.dry_run
         IPay::log.info 'Dry run enabled, not sending to API'
         return
       end
-      
+    
       url = URI.parse(api_url)
       http = Net::HTTP.new(url.host, url.port)
       http.use_ssl = true
@@ -45,13 +46,13 @@ module IPay
       store = OpenSSL::X509::Store.new
       store.set_default_paths
       http.cert_store = store
-      
+    
       req = Net::HTTP::Post.new(url.path)
       req.body = data
-      
+    
       res = http.start { |http| http.request(req) }
       res.body
-      
+    
       rescue EOFError
         raise RequestError.new('Unable to send your request or the request was rejected by the server.')
     end
@@ -63,6 +64,6 @@ module IPay
         </TRANSACTION>
       </REQUEST>"
     end
-     
+   
   end
 end

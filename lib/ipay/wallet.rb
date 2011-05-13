@@ -1,11 +1,13 @@
+require 'ipay/api_request'
+
 module IPay
   module Wallet
-    
+  
     def self.default_values(data)
       data[:transaction_indicator] ||= TXN_VIA_HTTPS
       data
     end
-    
+  
     class Client < ApiRequest
       self.service_format = '1010'
 
@@ -21,7 +23,7 @@ module IPay
         self.send_request(data)
       end
     end
-    
+  
     class Account < ApiRequest
       self.service_format = '1010'
 
@@ -37,6 +39,6 @@ module IPay
         self.send_request(data)
       end
     end
-    
+  
   end
 end
