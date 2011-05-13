@@ -4,3 +4,4 @@ config
 *.log
 *.gem
 *.xml
+certification.rb
