@@ -71,6 +71,6 @@ Certification
 
 IPay requires that test accounts submit an xml file of compiled responses before allowing an account to be used in production mode. The IPay gem has a certification mode that will compile all responses into the appropriate file/format for you automatically:
 
-	IPay::Certification.run do 
+	IPay::Certification.capture do
 		# ... all responses for api requests are now logged and saved when the block ends
 	end

@@ -9,12 +9,11 @@ Gem::Specification.new do |s|
   s.authors     = 'Nick Wilson'
   s.email       = 'wilson.nick@gmail.com'
   s.homepage    = 'https://github.com/AudioAddict/ipay'
-  s.description = ''
-  s.summary     = 'Ruby gem for interfacing with the iPay XML API'
+  s.description = 'iPay is a simple library for interfacing with Planet Payments payment solutions API, iPay. For more information visit http://www.ipay.com'
+  s.summary     = 'library for interfacing with iPay xml API'
   
-  s.has_rdoc      = false
   s.require_path  = 'lib'
-  s.files         = Dir.glob("{lib,test}/**/*") + %w(README.md Rakefile)
+  s.files         = Dir.glob("{lib,test,example}/**/*") + %w(README.md Rakefile)
   
   s.add_dependency 'libxml-ruby'
 end

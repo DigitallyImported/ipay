@@ -8,7 +8,7 @@ module IPay
       @@responses << parsed_xml.to_s.split("\n")[2...-1].join("\n") + "\n"
     end
     
-    def self.run(output_path = './')
+    def self.capture(output_path = './')
       IPay::config do |c|
         c.certification = true
       end
