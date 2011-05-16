@@ -16,16 +16,26 @@ IPay::config do |c|
 end
 
 IPay::Certification.capture do 
+  
+  resp_auth = IPay::CC::Debit.auth(
+  :account_number => '4000009999999991', :cvv => 123, :expiration => CC_EXP, 
+  :first_name => 'nick', :last_name => 'wilson', :address => '123 fake st', :city => 'sometown',  :state => 'NY', :postal_code => '90210', :country => IPay::Countries::USA
+  )
 
-  resp = IPay::CC::Debit.sale(
+  resp_sale1 = IPay::CC::Debit.sale(
     :amount => '4.99', 
     :account_number => '4000009999999991', :cvv => 123, :expiration => CC_EXP, 
     :first_name => 'nick', :last_name => 'wilson', :address => '123 fake st', :city => 'sometown',  :state => 'NY', :postal_code => '90210', :country => IPay::Countries::USA
   )
 
-  resp = IPay::CC::Debit.sale(
+  resp_sale2 = IPay::CC::Debit.sale(
     :amount => '59.99', 
     :account_number => '4000009999999991', :cvv => 123, :expiration => CC_EXP, 
     :first_name => 'nick', :last_name => 'wilson', :address => '123 fake st', :city => 'sometown',  :state => 'NY', :postal_code => '90210', :country => IPay::Countries::USA
   )
+  
+  sleep(5)
+  
+  IPay::CC::Debit.void(resp.data[:transaction_id)
+  
 end

@@ -18,6 +18,7 @@ module IPay
       end
 
       def self.void(data)
+        data = {:transaction_id => data} if data.is_a?(String) || data.is_a?(Fixnum)
         self.send_request(data)
       end
     end
@@ -41,6 +42,7 @@ module IPay
       end
 
       def self.void(data)
+        data = {:transaction_id => data} if data.is_a?(String) || data.is_a?(Fixnum)
         self.send_request(data)
       end
     end

@@ -70,9 +70,7 @@ class TestCC < Test::Unit::TestCase
     
     sleep(3)
     
-    resp = IPay::CC::Debit.void(
-      :transaction_id => resp.data[:transaction_id]
-    )
+    resp = IPay::CC::Debit.void resp.data[:transaction_id]
     
     assert resp.success?
   end
@@ -116,9 +114,7 @@ class TestCC < Test::Unit::TestCase
     
     sleep(3)
     
-    resp = IPay::CC::Credit.void(
-      :transaction_id => resp.data[:transaction_id]
-    )
+    resp = IPay::CC::Credit.void resp.data[:transaction_id]
     
     assert resp.success?
   end
