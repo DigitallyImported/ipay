@@ -11,6 +11,7 @@ module IPay
   
   autoload :CC,       'ipay/cc'
   autoload :Wallet,   'ipay/wallet'
+  autoload :Currency, 'ipay/currency'
   autoload :Network,  'ipay/network'
   
   autoload :Certification, 'ipay/certification'

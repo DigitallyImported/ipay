@@ -16,7 +16,7 @@ class TestErrors < Test::Unit::TestCase
       :city => 'sometown', 
       :state => 'NY', 
       :postal_code => '90210', 
-      :country => IPay::Countries::USA
+      :country => IPay::Countries.country_code(:us)
     )
   
     assert resp.error?
@@ -38,7 +38,7 @@ class TestErrors < Test::Unit::TestCase
         :city => 'sometown', 
         :state => 'NY', 
         :postal_code => '90210', 
-        :country => IPay::Countries::USA
+        :country => IPay::Countries.country_code(:us)
       )
     end
       

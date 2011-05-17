@@ -46,6 +46,10 @@ module IPay
         data = {:transaction_id => data} if data.is_a?(String) || data.is_a?(Fixnum)
         self.send_request(data)
       end
+      
+      def self.reversal(data)
+        self.send_request(data)
+      end
     end
   
   end

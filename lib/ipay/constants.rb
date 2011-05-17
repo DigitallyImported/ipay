@@ -8,6 +8,14 @@ module IPay
       key = key.to_s.downcase.to_sym
       @@countries[key]
     end
+    
+    def self.currency_code(key)
+      @@countries[key][:currency_code] rescue nil
+    end
+    
+    def self.country_code(key)
+      @@countries[key][:country_code] rescue nil
+    end
   end
   
   EM_SWIPED             = 1
@@ -29,6 +37,15 @@ module IPay
   TXN_INDICATOR_AUTH_FAILED = 6
   TXN_INDICATOR_HTTPS       = 7
   
+  BILLING_TXN_AUTH            = 0
+  BILLING_TXN_SALE            = 1
+  BILLING_TXN_AVS             = 2
+  BILLING_TXN_ACH_VALIDATION  = 3
+  
   ACCOUNT_CC  = 'CC'
   ACCOUNT_ACH = 'ACH'
+  
+  QUERY_TYPE_TXN    = 0
+  QUERY_TYPE_GROUP  = 1
+  
 end
