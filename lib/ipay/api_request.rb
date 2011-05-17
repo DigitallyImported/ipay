@@ -1,7 +1,3 @@
-require 'net/https'
-require 'uri'
-require 'yaml'
-
 require 'ipay/xml_request'
 require 'ipay/response'
 
@@ -34,7 +30,7 @@ module IPay
     
       m = eval("#{self.service}")
       data = m::default_values(data) if m::respond_to?(:default_values)
-    
+      
       request = XmlRequest.new(data)  
       Response.new request.send
     end 

@@ -2,10 +2,11 @@ require 'ipay/api_request'
 
 module IPay
   module Wallet
-  
+    
     def self.default_values(data)
-      data[:transaction_indicator] ||= TXN_VIA_HTTPS
-      data
+      {
+        :transaction_indicator => IPay::config.defaults[:transaction_indicator]
+      }.merge(data)
     end
   
     class Client < ApiRequest

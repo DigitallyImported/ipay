@@ -1,0 +1,19 @@
+:us:
+  :name: US Dollar
+  :country_code: USD
+  :currency_code: 840 
+  
+:eu:
+  :name: Euro
+  :country_code: EUR
+  :currency_code: 978
+  
+:ru:
+  :name: Russian Ruble
+  :country_code: RUB
+  :currency_code: 643
+    
+:ca:
+  :name: Canadian Dollar
+  :country_code: CAD
+  :currency_code: 124

@@ -15,7 +15,7 @@ class TestCC < Test::Unit::TestCase
       :city => 'sometown', 
       :state => 'NY', 
       :postal_code => '90210', 
-      :country => IPay::Countries::USA
+      :country => IPay::Countries[:us][:country_code]
     )
     
     assert resp.success?
@@ -33,8 +33,8 @@ class TestCC < Test::Unit::TestCase
       :address => '123 fake st', 
       :city => 'sometown', 
       :state => 'NY', 
-      :postal_code => '90210', 
-      :country => IPay::Countries::USA
+      :postal_code => '90210',
+      :country => IPay::Countries[:us][:country_code]
     )
     
     assert resp.success?
@@ -61,8 +61,8 @@ class TestCC < Test::Unit::TestCase
       :address => '123 fake st', 
       :city => 'sometown', 
       :state => 'NY', 
-      :postal_code => '90210', 
-      :country => IPay::Countries::USA
+      :postal_code => '90210',
+      :country => IPay::Countries[:us][:country_code]
     )
     
     assert resp.success?
@@ -86,8 +86,8 @@ class TestCC < Test::Unit::TestCase
       :address => '123 fake st', 
       :city => 'sometown', 
       :state => 'NY', 
-      :postal_code => '90210', 
-      :country => IPay::Countries::USA
+      :postal_code => '90210',
+      :country => IPay::Countries[:us][:country_code]
     )
     
     assert resp.success?
@@ -105,8 +105,8 @@ class TestCC < Test::Unit::TestCase
       :address => '123 fake st', 
       :city => 'sometown', 
       :state => 'NY', 
-      :postal_code => '90210', 
-      :country => IPay::Countries::USA
+      :postal_code => '90210',
+      :country => IPay::Countries[:us][:country_code]
     )
     
     assert resp.success?

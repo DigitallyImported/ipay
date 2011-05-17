@@ -4,10 +4,11 @@ module IPay
   module CC
   
     def self.default_values(data)
-      data[:currency_code] ||= 840 # USD
-      data[:currency_indicator] ||= CUR_DOMESTIC
-      data[:transaction_indicator] ||= TXN_VIA_HTTPS
-      data
+      {
+        :currency_code => IPay::config.defaults[:currency_code],
+        :currency_indicator => IPay::config.defaults[:currency_indicator],
+        :transaction_indicator => IPay::config.defaults[:transaction_indicator]
+      }.merge(data)
     end
   
     class Credit < ApiRequest
