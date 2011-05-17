@@ -20,6 +20,7 @@ module IPay
       end
 
       def self.delete(data)
+        data = {:client_id => data} if data.is_a?(String) || data.is_a?(Fixnum)
         self.send_request(data)
       end
     end
@@ -36,6 +37,7 @@ module IPay
       end
 
       def self.delete(data)
+         data = {:account_id => data} if data.is_a?(String) || data.is_a?(Fixnum)
         self.send_request(data)
       end
     end

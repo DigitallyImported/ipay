@@ -78,9 +78,7 @@ class TestWallet < Test::Unit::TestCase
     
     sleep(3)
     
-    resp = IPay::Wallet::Client.delete(
-      :client_id => resp.data[:client_id]
-    )
+    resp = IPay::Wallet::Client.delete resp.data[:client_id]
     
     assert resp.success?
     assert resp.data.include?(:transaction_id)
@@ -190,9 +188,8 @@ class TestWallet < Test::Unit::TestCase
     
     sleep(3)
     
-    resp = IPay::Wallet::Account.delete(
-      :account_id => resp.data[:account_id]
-    )
+    resp = IPay::Wallet::Account.delete resp.data[:account_id]
+    
     assert resp.success?
     assert resp.data.include?(:transaction_id)
   end
