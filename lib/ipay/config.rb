@@ -21,7 +21,6 @@ module IPay
       config = OpenStruct.new(YAML.load_file(path)) unless config
     else
       config = OpenStruct.new
-      IPay::log.warn "Failed to locate configuration file '#{CONFIG_NAME}', place in 'config/'"
     end
     
     set_defaults(config)

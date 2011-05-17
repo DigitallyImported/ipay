@@ -26,6 +26,7 @@ module IPay
     end
 
     def send
+      raise RequestError.new('No iPay API url was specified in your configuration') unless IPay::config.url
       do_post(IPay::config.url, @xml)
     end
 
@@ -58,6 +59,7 @@ module IPay
     end
 
     def build_xml(fields_xml)      
+      raise RequestError.new('No iPay API company_key was specified in your configuration') unless IPay::config.company_key
       "<REQUEST KEY=\"#{IPay::config.company_key}\" PROTOCOL=\"1\" FMT=\"1\" ENCODING=\"0\">
         <TRANSACTION>
           <FIELDS>#{fields_xml}</FIELDS>
