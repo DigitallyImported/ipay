@@ -6,6 +6,13 @@ Ruby gem for interfacing with the iPay XML API
 Changelog
 ---------
 
+**v0.2.0**
+
+- Updated tests
+- Included example certification file for CC/Wallet Services
+- Added countries yaml for converting iso 3166 2 char country codes to iPay 3 char country code and currency codes
+- Cleaned up some constants
+
 **v0.1.1**
 
 - Added certification mode
@@ -59,7 +66,7 @@ Usage
 		:city => 'sometown', 
 		:state => 'NY', 
 		:postal_code => '90210', 
-		:country => IPay::Countries::USA
+		:country => IPay::Countries.country_code(:us)
 	)
 
 	if resp.success?
