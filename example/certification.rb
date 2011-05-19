@@ -21,7 +21,8 @@ IPay::Certification.capture do
   IPay::CC::Debit.auth({:amount => '0.99'}.merge(cc.merge address))
   resp_auth = IPay::CC::Debit.auth({:amount => '4.99'}.merge(cc.merge address))
   resp_sale = IPay::CC::Debit.sale({:amount => '4.99', :currency_code => IPay::Countries.currency_code(:eu), :currency_indicator => IPay::CUR_INDICATOR_MCP}.merge(cc.merge address))
-  IPay::CC::Debit.sale({:amount => '59.99'}.merge(cc.merge address))
+  resp_sale2 = IPay::CC::Debit.sale({:amount => '59.99'}.merge(cc.merge address))
+  resp_sale3 = IPay::CC::Debit.sale({:amount => '19.99'}.merge(cc.merge address))
   
   # give the transactions a few seconds to process internally
   sleep(5)
@@ -29,8 +30,11 @@ IPay::Certification.capture do
   IPay::CC::Debit.void resp_auth.data[:transaction_id]
   IPay::CC::Debit.void resp_sale.data[:transaction_id]
   
+  IPay::CC::Credit.refund({:transaction_id => resp_sale2.data[:transaction_id], :amount => '4.99', :currency_code => IPay::Countries.currency_code(:eu), :currency_indicator => IPay::CUR_INDICATOR_MCP}.merge(cc.merge address))
+  IPay::CC::Credit.refund({:transaction_id => resp_sale3.data[:transaction_id], :amount => '59.99'}.merge(cc.merge address))
+  
   resp_refund = IPay::CC::Credit.refund({:amount => '4.99', :currency_code => IPay::Countries.currency_code(:eu), :currency_indicator => IPay::CUR_INDICATOR_MCP}.merge(cc.merge address))
-  resp_refund2 = IPay::CC::Credit.refund({:amount => '10.99'}.merge(cc.merge address))
+  resp_refund2 = IPay::CC::Credit.refund({:amount => '59.99'}.merge(cc.merge address))
   
   sleep(5)
   
