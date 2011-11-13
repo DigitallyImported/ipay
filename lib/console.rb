@@ -1,2 +1,2 @@
 require 'ipay'
-IPay::log = STDOUT
+IPay.log = STDOUT

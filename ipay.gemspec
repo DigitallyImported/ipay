@@ -16,4 +16,5 @@ Gem::Specification.new do |s|
   s.files         = Dir.glob("{lib,test,example}/**/*") + %w(README.md Rakefile)
   
   s.add_dependency 'libxml-ruby'
+  s.add_dependency 'retryable'
 end

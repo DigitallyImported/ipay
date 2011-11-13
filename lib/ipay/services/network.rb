@@ -4,8 +4,12 @@ module IPay
   module Network
   
     class Status < ApiRequest
-      def self.query
-        self.send_request
+      class << self
+        
+        def query
+          send_request
+        end
+        
       end
     end
   

@@ -2,40 +2,47 @@ require 'yaml'
 require 'ostruct'
 
 module IPay
-  
-  DEFAULTS = { 
-    :currency_code => IPay::Countries[:us][:currency_code], 
+  ServiceDefaults = { 
+    :currency_code => IPay::Currencies.currency_code(:us),
     :currency_indicator => CUR_INDICATOR_DOMESTIC,
     :transaction_indicator => TXN_INDICATOR_HTTPS
   }
   
-  def self.config_file
-    File.expand_path(File.join(ROOT, 'config', CONFIG_NAME))
-  end
-
-  def self.load_config_file
-    path = File.expand_path(config_file)
+  class << self
     
-    if File.readable?(path)
-      IPay::log.debug "Using configuration file '#{path}'"
-      config = OpenStruct.new(YAML.load_file(path)) unless config
-    else
-      config = OpenStruct.new
+    def default_log_file
+      path = File.join(ROOT, 'log')
+      path = '.' unless File.directory?(path)
+      File.expand_path(File.join(path, "#{LOG_PREFIX}-#{ENV}.log"))
     end
     
-    set_defaults(config)
-  end
+    def config_file
+      File.expand_path(File.join(ROOT, 'config', CONFIG_NAME))
+    end
+  
+    def load_config_file
+      config = if File.readable?(config_file)
+        OpenStruct.new(YAML.load_file(config_file)[ENV])
+      else
+        OpenStruct.new
+      end
+    
+      set_defaults(config)
+    end
+    
+    def set_defaults(config)
+      config.dry_run ||= false
+      config.certification ||= false
+      config.retries ||= 3
+      config.log_file ||= default_log_file
+      config.defaults = ServiceDefaults.merge config.defaults || {}
+      config
+    end
 
-  def self.set_defaults(config)
-    config.dry_run ||= false
-    config.certification ||= false
-    config.defaults = DEFAULTS.merge(config.defaults || {}) # yaml config has higher priority
-    config
-  end
-
-  def self.config
-    @config ||= load_config_file
-    yield @config if block_given?
-    @config
+    def config
+      @config ||= load_config_file
+      yield @config if block_given?
+      @config
+    end
   end
 end

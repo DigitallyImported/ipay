@@ -16,7 +16,7 @@ class TestWallet < Test::Unit::TestCase
       :city => 'sometown', 
       :state => 'NY', 
       :postal_code => '90210', 
-      :country => IPay::Countries.country_code(:us)
+      :country => IPay::Currencies.country_code(:us)
     )
     
     assert resp.success?
@@ -38,7 +38,7 @@ class TestWallet < Test::Unit::TestCase
       :city => 'sometown', 
       :state => 'NY', 
       :postal_code => '90210', 
-      :country => IPay::Countries.country_code(:us)
+      :country => IPay::Currencies.country_code(:us)
     )
     
     assert resp.success?
@@ -69,7 +69,7 @@ class TestWallet < Test::Unit::TestCase
       :city => 'sometown', 
       :state => 'NY', 
       :postal_code => '90210', 
-      :country => IPay::Countries.country_code(:us)
+      :country => IPay::Currencies.country_code(:us)
     )
     
     assert resp.success?
@@ -98,7 +98,7 @@ class TestWallet < Test::Unit::TestCase
       :city => 'sometown', 
       :state => 'NY', 
       :postal_code => '90210', 
-      :country => IPay::Countries.country_code(:us)
+      :country => IPay::Currencies.country_code(:us)
     )
     
     assert resp.success?
@@ -132,7 +132,7 @@ class TestWallet < Test::Unit::TestCase
       :city => 'sometown', 
       :state => 'NY', 
       :postal_code => '90210', 
-      :country => IPay::Countries.country_code(:us)
+      :country => IPay::Currencies.country_code(:us)
     )
     
     assert resp.success?
@@ -166,7 +166,7 @@ class TestWallet < Test::Unit::TestCase
       :city => 'sometown', 
       :state => 'NY', 
       :postal_code => '90210', 
-      :country => IPay::Countries.country_code(:us)
+      :country => IPay::Currencies.country_code(:us)
     )
     
     assert resp.success?

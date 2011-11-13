@@ -10,7 +10,7 @@ module IPay
     attr_reader :status, :server_time, :data, :raw_xml
   
     def initialize(xml)
-      if IPay::config.dry_run
+      if IPay.config.dry_run
         @status = {:arc => '00', :mrc => '00', :description => 'Dry Run, no response processed'}
       else
         @raw_xml = xml
@@ -26,7 +26,11 @@ module IPay
       not success?
     end
   
-    private
+    def errors
+      @errors ||= []
+    end
+  
+    protected
     
     def parse_response(xml)
       IPay.log.debug 'Parsing response xml...'
@@ -36,7 +40,7 @@ module IPay
       parser.context.options = PARSER_OPT
       parsed = parser.parse
     
-      IPay::Certification.log(parsed) if IPay::config.certification
+      Certification.log(parsed) if IPay.config.certification
     
       response = xml_node_to_hash(parsed.find('//RESPONSE/RESPONSE/FIELDS')[0])
       raise ResponseError.new 'Invalid response from server' unless response and response.include? :arc
@@ -50,9 +54,50 @@ module IPay
       @status = { :arc => response.delete(:arc), :mrc => response.delete(:mrc), :description => response.delete(:response_text) }
       @data = response
     
-      IPay::log.info "ARC=#{@status[:arc]}, MRC=#{@status[:mrc]}, RESPONSE_TEXT=#{@status[:description]}"
-      IPay::log.debug response
-      raise RequestTimeout.new(@status[:description]) if @status[:arc] == 'TO'
+      IPay.log.info "ARC=#{@status[:arc]}, MRC=#{@status[:mrc]}, RESPONSE_TEXT=#{@status[:description]}"
+      IPay.log.debug response
+      
+      process_errors(@status[:mrc], @status[:arc], @status[:description]) unless success?
+    end
+  
+    def process_errors(mrc, arc, desc)
+      
+      unless arc == 'ER' # denotes MRC error
+        errors << 
+        case(arc)
+          when 'TO' then raise RequestTimeout.new desc
+          #when '59' then raise FraudError.new
+          #when '79' then 'Already reversed'
+          #else "Transaction declined: mrc=#{mrc}, arc=#{arc}, description=#{desc}"
+        end
+      end
+      
+      errors <<
+      case(mrc)
+        when 'UP' then raise ServiceUnavailableError.new('System unavailable, retry')
+        when 'SU' then raise ServiceUnavailableError.new('Unable to process at this time, retry')
+        when 'IC' then raise RequestError.new('Missing or invalid Company Key')
+        when 'ID' then raise RequestError.new('Missing or invalid Transaction data')
+        when 'NX' then raise RequestError.new('Invalid Request: FIELDS node not present')
+        
+        # when 'AE' then 'Authorization has expired'
+        #         when 'AX' then "Transaction amount exceeded: #{desc}"
+        #         when 'CF' then 'Credit refused, no relevant sale'
+        #         when 'DR' then 'Unable to delete'
+        #         when 'IK' then "Invalid Key: #{desc}"
+        #         when 'MK' then "Missing Key: #{desc}"
+        #         when 'TF' then 'Transaction not found'
+        #         when 'TS' then 'Transaction not settled'
+        #         when 'TC' then 'Transaction already captured'
+        #         when 'TD' then 'Transaction already deleted'
+        #         when 'TR' then 'Transaction already reversed'
+        #         when 'TS' then 'Transaction already settled'
+        #         when 'TV' then 'Transaction already deleted'
+        #         when 'VR' then 'Void Refused'
+        #         when 'XE' then 'Currencery conversion error'
+        #         else "Error processing transaction: mrc=#{mrc}, arc=#{arc}, description=#{desc}"
+      end
+      
     end
   
     def xml_node_to_hash(node)

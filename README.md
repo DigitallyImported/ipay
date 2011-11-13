@@ -45,7 +45,7 @@ Example configuration:
 
 You can also configure IPay via a block:
 
-	IPay::config do |c|
+	IPay.config do |c|
 	  c.url = 'https://uap.txngw.com/'
 	  c.company_key = 6990
 	  c.terminal_id = 6177
@@ -66,7 +66,7 @@ Usage
 		:city => 'sometown', 
 		:state => 'NY', 
 		:postal_code => '90210', 
-		:country => IPay::Countries.country_code(:us)
+		:country => IPay::Currencies.country_code(:us)
 	)
 
 	if resp.success?

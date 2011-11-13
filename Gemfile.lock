@@ -1,13 +1,19 @@
 PATH
   remote: .
   specs:
-    ipay (0.0.1)
+    ipay (0.2.1)
+      active_support
       libxml-ruby
+      retryable
 
 GEM
   remote: http://rubygems.org/
   specs:
-    libxml-ruby (2.0.5)
+    active_support (3.0.0)
+      activesupport (= 3.0.0)
+    activesupport (3.0.0)
+    libxml-ruby (2.2.2)
+    retryable (1.2.5)
 
 PLATFORMS
   ruby
