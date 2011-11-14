@@ -1,7 +1,7 @@
 require 'helper'
 
 class TestCC < Test::Unit::TestCase
-  CC_EXP = "#{Date.today.month.to_s.rjust(2,'0')}#{Date.today.year.to_s[2..-1]}"
+  CC_EXP = Date.today.strftime '%m%y'
   
   test 'debit sale' do
     resp = IPay::CC::Debit.sale(

@@ -4,12 +4,15 @@ module IPay
   CONFIG_NAME = 'ipay.yml'
   LOG_PREFIX  = 'ipay'
   
+  autoload :Certification,  'ipay/certification'
+  
   autoload :CC,       'ipay/services/cc'
   autoload :Wallet,   'ipay/services/wallet'
   autoload :Currency, 'ipay/services/currency'
   autoload :Network,  'ipay/services/network'
   
-  autoload :Certification,  'ipay/certification'
+  autoload :Client,     'ipay/models/client'
+  autoload :CreditCard, 'ipay/models/credit_card'
 end
 
 $:.unshift(File.dirname(__FILE__))

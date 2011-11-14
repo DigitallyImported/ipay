@@ -13,17 +13,17 @@ module IPay
       self.service_format = '1010'
       class << self
         
-        def insert(data)
+        def insert(client, account, txn_type = BILLING_TXN_AVS)
+          data = {:billing_transaction => txn_type}.merge(client.serializable_hash.merge(account.serializable_hash))
           send_request data
         end
 
-        def modify(data)
-          send_request data
+        def modify(client)
+          send_request client.serializable_hash
         end
         
-        def delete(data)
-          data = {:client_id => data} if data.is_a?(String) || data.is_a?(Fixnum)
-          send_request data
+        def delete(client_id)
+          send_request :client_id => client_id
         end
         
         alias :update :modify
@@ -34,17 +34,21 @@ module IPay
       self.service_format = '1010'
       class << self
       
-        def insert(data)
+        def insert(client_id, account, txn_type = BILLING_TXN_AVS)
+          data = {
+            :billing_transaction => txn_type, 
+            :client_id => client_id
+          }.merge(account.serializable_hash)
+          
           send_request data
         end
 
-        def modify(data)
-          send_request data
+        def modify(account)
+          send_request account.serializable_hash
         end
 
-        def delete(data)
-          data = {:account_id => data} if data.is_a?(String) || data.is_a?(Fixnum)
-          send_request data
+        def delete(account_id)
+          send_request :account_id => account_id
         end
         
         alias :update :modify

@@ -17,4 +17,6 @@ Gem::Specification.new do |s|
   
   s.add_dependency 'libxml-ruby'
   s.add_dependency 'retryable'
+  s.add_dependency 'activemodel'
+  s.add_dependency 'activesupport'
 end

@@ -25,9 +25,9 @@ module IPay
     def error?
       not success?
     end
-  
+    
     def errors
-      @errors ||= []
+      @errors ||= Errors.new
     end
   
     protected
@@ -62,17 +62,35 @@ module IPay
   
     def process_errors(mrc, arc, desc)
       
-      unless arc == 'ER' # denotes MRC error
-        errors << 
+      unless arc == 'ER' # denotes MRC related error, skip ARC
         case(arc)
+          when '03' then raise RequestError.new 'Invalid Merchant ID'
+          
+          when '04' then raise FraudError.new desc
+          when '59' then raise FraudError.new desc
+          
+          when '01','02' then errors.add "Transaction Declined, please call #{desc}"
+          when '05' then errors.add 'Transaction Declined'
+          when '51' then errors.add 'Transaction Declined: Insufficient funds'
+          when '51' then errors.add 'Transaction Declined: Card Expired'
+          when '61' then errors.add 'Transaction Declined: Exceeds withdrawal limit'
+          when '65' then errors.add 'Transaction Declined: Activity limit exceeded'  
+          when 'N4' then errors.add 'Transaction Declined: Exceeds issuer withdrawal limit'
+          when 'N7' then errors.add 'Transaction Declined: CVV2 is invalid.'
+            
+          # possibly recoverable
+          when '87' then raise RetryRequest.new desc
+          when '91' then raise RetryRequest.new desc
+          when '96' then raise RetryRequest.new desc
+          when 'XA' then raise RetryRequest.new desc
+          when 'XD' then raise RetryRequest.new desc
+          when 'Z3' then raise RetryRequest.new desc
           when 'TO' then raise RequestTimeout.new desc
-          #when '59' then raise FraudError.new
-          #when '79' then 'Already reversed'
-          #else "Transaction declined: mrc=#{mrc}, arc=#{arc}, description=#{desc}"
+                      
+          else errors.add "Transaction Declined: (#{mrc}-#{arc} -- #{desc})"
         end
       end
       
-      errors <<
       case(mrc)
         when 'UP' then raise ServiceUnavailableError.new('System unavailable, retry')
         when 'SU' then raise ServiceUnavailableError.new('Unable to process at this time, retry')
@@ -80,22 +98,22 @@ module IPay
         when 'ID' then raise RequestError.new('Missing or invalid Transaction data')
         when 'NX' then raise RequestError.new('Invalid Request: FIELDS node not present')
         
-        # when 'AE' then 'Authorization has expired'
-        #         when 'AX' then "Transaction amount exceeded: #{desc}"
-        #         when 'CF' then 'Credit refused, no relevant sale'
-        #         when 'DR' then 'Unable to delete'
-        #         when 'IK' then "Invalid Key: #{desc}"
-        #         when 'MK' then "Missing Key: #{desc}"
-        #         when 'TF' then 'Transaction not found'
-        #         when 'TS' then 'Transaction not settled'
-        #         when 'TC' then 'Transaction already captured'
-        #         when 'TD' then 'Transaction already deleted'
-        #         when 'TR' then 'Transaction already reversed'
-        #         when 'TS' then 'Transaction already settled'
-        #         when 'TV' then 'Transaction already deleted'
-        #         when 'VR' then 'Void Refused'
-        #         when 'XE' then 'Currencery conversion error'
-        #         else "Error processing transaction: mrc=#{mrc}, arc=#{arc}, description=#{desc}"
+        when 'IK' then errors.add desc, 'is invalid'
+        when 'MK' then errors.add desc, 'is required'  
+        when 'AE' then errors.add 'Authorization has expired'
+        when 'AX' then errors.add "Transaction amount exceeded: #{desc}"
+        when 'CF' then errors.add 'Credit refused, no relevant sale'
+        when 'DR' then errors.add 'Unable to delete'
+        when 'TF' then errors.add 'Transaction not found'
+        when 'TS' then errors.add 'Transaction not settled'
+        when 'TC' then errors.add 'Transaction already captured'
+        when 'TD' then errors.add 'Transaction already deleted'
+        when 'TR' then errors.add 'Transaction already reversed'
+        when 'TS' then errors.add 'Transaction already settled'
+        when 'TV' then errors.add 'Transaction already void'
+        when 'VR' then 'Void Refused'
+        when 'XE' then 'Currencery conversion error'
+        else errors.add "Error processing transaction: (#{mrc}-#{arc} -- #{desc})"
       end
       
     end

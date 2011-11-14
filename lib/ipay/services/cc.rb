@@ -18,9 +18,8 @@ module IPay
           send_request data
         end
 
-        def void(data)
-          data = {:transaction_id => data} if data.is_a?(String) || data.is_a?(Fixnum)
-          send_request data
+        def void(txn_id)
+          send_request :transaction_id => txn_id
         end
         
       end
@@ -46,9 +45,8 @@ module IPay
           send_request data
         end
 
-        def void(data)
-          data = {:transaction_id => data} if data.is_a?(String) || data.is_a?(Fixnum)
-           send_request data
+        def void(txn_id)
+           send_request :transaction_id => txn_id
         end
       
         def reversal(data)
