@@ -4,7 +4,7 @@ module IPay
   class Model
     include ActiveModel::Validations
     include ActiveModel::Serialization
-      
+    
     attr_accessor :attributes
     attr_accessor :skip_validations
     
@@ -31,6 +31,10 @@ module IPay
   protected
     def run_validations!
       @skip_validations ? true : super
+    end
+   
+    def self.human_attribute_name(attr, opt = {})
+      (defined?(@humanized_attributes) && @humanized_attributes[attr.to_sym]) || super
     end
     
   end

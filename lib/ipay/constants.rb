@@ -1,23 +1,23 @@
 require 'yaml'
 
 module IPay
-  module Currencies
+  module Countries
     class << self
       def [](key)
-        @@currencies ||= YAML.load_file(File.join(File.dirname(__FILE__), 'currencies.yml'))
-        @@currencies[key.to_s.downcase]
+        @@Countries ||= YAML.load_file(File.join(File.dirname(__FILE__), 'countries.yml'))
+        @@Countries[key]
       end
       
-      def name(key)
-        self[key]['name'] rescue raise ArgumentError.new("No Currency Name could be found for '#{key}'")
+      def currency_name(key)
+        self[key]['currency']['name'] rescue nil
       end
       
       def currency_code(key)
-        self[key]['currency_code'] rescue raise ArgumentError.new("No Currency Code could be found for '#{key}'")
+        self[key]['currency']['ipay_code'] rescue nil
       end
     
-      def country_code(key)
-        self[key]['country_code'] rescue raise ArgumentError.new("No Country Code could be found for '#{key}'")
+      def alpha3(key)
+        self[key]['alpha3'] rescue nil
       end
     end
   end

@@ -66,7 +66,7 @@ Usage
 		:city => 'sometown', 
 		:state => 'NY', 
 		:postal_code => '90210', 
-		:country => IPay::Currencies.country_code(:us)
+		:country => IPay::Countries.currency_code('United States')
 	)
 
 	if resp.success?

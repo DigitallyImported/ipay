@@ -12,7 +12,7 @@ class TestWallet < Test::Unit::TestCase
         :city => 'sometown', 
         :state => 'NY', 
         :postal_code => '90210', 
-        :country => :us
+        :country => 'United States'
       }),
       
       IPay::CreditCard.new({
@@ -41,10 +41,9 @@ class TestWallet < Test::Unit::TestCase
     
     sleep(3)
     
-    @resp = IPay::Wallet::Client.modify IPay::Client.new({
-      :client_id => @resp.data[:client_id], 
-      :first_name => 'gregory washington'
-    })
+    @resp = IPay::Wallet::Client.modify(@resp.data[:client_id], 
+      IPay::Client.new(:first_name => 'gregory washington')
+    )
     
     assert @resp.success?
     assert @resp.data.include?(:transaction_id)
@@ -90,8 +89,7 @@ class TestWallet < Test::Unit::TestCase
     
     sleep(3)
     
-    @resp = IPay::Wallet::Account.modify IPay::CreditCard.new({
-      :account_id => @resp.data[:account_id],
+    @resp = IPay::Wallet::Account.modify @resp.data[:account_id], IPay::CreditCard.new({
       :account_number => '5100009999999997',
       :cvv => 987,
       :expiration => CC_EXP

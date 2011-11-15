@@ -18,8 +18,8 @@ module IPay
           send_request data
         end
 
-        def modify(client)
-          send_request client.serializable_hash
+        def modify(client_id, client)
+          send_request client.serializable_hash.merge :client_id => client_id
         end
         
         def delete(client_id)
@@ -35,16 +35,14 @@ module IPay
       class << self
       
         def insert(client_id, account, txn_type = BILLING_TXN_AVS)
-          data = {
-            :billing_transaction => txn_type, 
-            :client_id => client_id
-          }.merge(account.serializable_hash)
-          
-          send_request data
+          send_request account.serializable_hash.merge({
+              :billing_transaction => txn_type,
+              :client_id => client_id
+            })
         end
 
-        def modify(account)
-          send_request account.serializable_hash
+        def modify(account_id, account)
+          send_request account.serializable_hash.merge :account_id => account_id
         end
 
         def delete(account_id)

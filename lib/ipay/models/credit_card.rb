@@ -3,26 +3,27 @@ require 'active_support/core_ext/enumerable'
 
 module IPay
   class CreditCard < Model
+    InvalidAccountNumberMsg = 'is invalid'
+    @humanized_attributes = { :cvv => 'CVV' }
     
-    validates_format_of :account_number, :with => /^\d{14,}$/, :message => 'is not a valid credit card number'
-    validates_format_of :expiration, :with => /^\d{4}$/, :message => 'is not a valid expiration date'
-    
-    validates :cvv, {
-        :length => { :minimum => 3, :maximum => 4, :message => 'is invalid' },
-        :numericality => {},
-        :allow_nil => true
-      }
+    validates_format_of :account_number, :with => /^\d{14,}$/, :message => InvalidAccountNumberMsg
+    validates_format_of :expiration, :with => /^\d{4}$/, :message => 'is invalid'
+    validates_format_of :cvv, :with => /^\d{3,4}$/, :message => 'is invalid'
     
     validate :luhn_check, :if => lambda { |r| r.attributes.include?(:account_number) }
     
     def initialize(attributes = {})
       attributes[:account_number] = clean_number(attributes[:account_number]) if attributes.include?(:account_number)
       attributes[:account] = ACCOUNT_CC
-      super attributes
+      super
     end
     
     def clean_number(number)
       number.gsub /\s|\-/, ''
+    end
+    
+    def description
+      "#{card_type} #{self.expiration}"
     end
     
     def card_type
@@ -57,7 +58,7 @@ module IPay
         d *= 2 if odd = !odd
         d > 9 ? d - 9 : d
       }.sum % 10 == 0
-      errors.add :account_number, 'is not a valid credit card number' unless check
+      errors.add :account_number, InvalidAccountNumberMsg unless check
     end
     
   end # class

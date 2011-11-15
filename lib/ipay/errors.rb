@@ -28,6 +28,14 @@ module IPay
       @errors[key] = msg
     end
     
+    def include?(key)
+      @errors.include? key
+    end
+    
+    def [](key)
+      @errors[key]
+    end
+    
     def to_hash
       @errors
     end
