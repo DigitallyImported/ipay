@@ -8,9 +8,11 @@ module IPay
       r.errors.add a, 'is required' if v.nil? or v.blank?
     end
     
+    validates_length_of :country, :is => 3, :message => 'is invalid' # IPay requires alpha3
+    
     def initialize(attributes = {})
       if attributes.include?(:country)
-        attributes[:country] = IPay::Countries.alpha3(attributes[:country]) || attributes[:country]
+        attributes[:country] = (Country[attributes[:country]] && Country[attributes[:country]].alpha3) || attributes[:country]
       end
       
       super

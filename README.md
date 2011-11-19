@@ -66,11 +66,13 @@ Usage
 		:city => 'sometown', 
 		:state => 'NY', 
 		:postal_code => '90210', 
-		:country => IPay::Countries.currency_code('United States')
+		:country => 'USA'
 	)
 
 	if resp.success?
 		puts resp.data[:transaction_id]
+	else
+		puts resp.errors.full_messages
 	end
 
 Certification

@@ -15,15 +15,15 @@ class TestModelClient < Test::Unit::TestCase
       :city => 'sometown', 
       :state => 'NY', 
       :postal_code => '90210', 
-      :country => 'United States'
+      :country => 'USA'
     )
     
     assert @client.valid?
   end
   
-  test 'convert country to alpha3' do
-    @client = IPay::Client.new :country => 'United States'  
-    assert_equal IPay::Countries.alpha3('United States'), @client.country
+  test 'convert alpha2 to alpha3' do
+    @client = IPay::Client.new :country => 'US'  
+    assert_equal Country['US'].alpha3, @client.country
   end
   
 end

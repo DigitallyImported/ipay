@@ -1,3 +1,6 @@
+require 'yaml'
+require 'countries'
+
 module IPay
   ENV         = (defined?(Rails) && Rails.env) || ENV['RACK_ENV'] || ENV['IPAY_ENV'] || 'development'
   ROOT        = (defined?(Rails) && Rails.root) || ENV['IPAY_ROOT'] || ::File.expand_path('.')

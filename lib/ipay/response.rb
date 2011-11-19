@@ -98,6 +98,7 @@ module IPay
         when 'ID' then raise RequestError.new('Missing or invalid Transaction data')
         when 'NX' then raise RequestError.new('Invalid Request: FIELDS node not present')
         
+        when 'AR' then errors.add 'We are unable to process this type of Credit Card'
         when 'IK' then errors.add desc, 'is invalid'
         when 'MK' then errors.add desc, 'is required'  
         when 'AE' then errors.add 'Authorization has expired'

@@ -12,7 +12,7 @@ class TestWallet < Test::Unit::TestCase
         :city => 'sometown', 
         :state => 'NY', 
         :postal_code => '90210', 
-        :country => 'United States'
+        :country => 'US'
       }),
       
       IPay::CreditCard.new({

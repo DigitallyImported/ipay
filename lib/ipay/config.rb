@@ -3,7 +3,7 @@ require 'ostruct'
 
 module IPay
   ServiceDefaults = { 
-    :currency_code => IPay::Countries.currency_code('United States'),
+    :currency_code => Country['US'].number,
     :currency_indicator => CUR_INDICATOR_DOMESTIC,
     :transaction_indicator => TXN_INDICATOR_HTTPS
   }

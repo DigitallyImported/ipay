@@ -23,7 +23,7 @@ module IPay
     end
     
     def description
-      "#{card_type} #{self.expiration}"
+      "#{card_type} #{account_number[account_number.length-4..-1]}"
     end
     
     def card_type

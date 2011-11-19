@@ -1,26 +1,6 @@
 require 'yaml'
 
 module IPay
-  module Countries
-    class << self
-      def [](key)
-        @@Countries ||= YAML.load_file(File.join(File.dirname(__FILE__), 'countries.yml'))
-        @@Countries[key]
-      end
-      
-      def currency_name(key)
-        self[key]['currency']['name'] rescue nil
-      end
-      
-      def currency_code(key)
-        self[key]['currency']['ipay_code'] rescue nil
-      end
-    
-      def alpha3(key)
-        self[key]['alpha3'] rescue nil
-      end
-    end
-  end
   
   EM_SWIPED             = 1
   EM_MANUAL_PRESENT     = 2
