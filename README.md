@@ -6,6 +6,11 @@ Ruby gem for interfacing with the iPay XML API
 Changelog
 ---------
 
+**v0.2.4**
+
+- Added models for Client and CreditCard with validations.
+- Added basic error handling.
+
 **v0.2.0**
 
 - Updated tests

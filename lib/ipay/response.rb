@@ -34,7 +34,6 @@ module IPay
     
     def parse_response(xml)
       IPay.log.debug 'Parsing response xml...'
-      IPay.log.debug xml
       
       parser = XML::Parser.string xml
       parser.context.options = PARSER_OPT
@@ -105,15 +104,15 @@ module IPay
         when 'AX' then errors.add "Transaction amount exceeded: #{desc}"
         when 'CF' then errors.add 'Credit refused, no relevant sale'
         when 'DR' then errors.add 'Unable to delete'
-        when 'TF' then errors.add 'Transaction not found'
-        when 'TS' then errors.add 'Transaction not settled'
+        when 'NF' then errors.add 'Transaction not found'
+        when 'NS' then errors.add 'Transaction not settled'
         when 'TC' then errors.add 'Transaction already captured'
         when 'TD' then errors.add 'Transaction already deleted'
         when 'TR' then errors.add 'Transaction already reversed'
         when 'TS' then errors.add 'Transaction already settled'
         when 'TV' then errors.add 'Transaction already void'
-        when 'VR' then 'Void Refused'
-        when 'XE' then 'Currencery conversion error'
+        when 'VR' then errors.add 'Void Refused'
+        when 'XE' then errors.add 'Currencery conversion error'
         else errors.add "Error processing transaction: (#{mrc}-#{arc} -- #{desc})"
       end
       

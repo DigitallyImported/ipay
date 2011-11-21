@@ -8,6 +8,11 @@ module IPay
     
     class << self
       attr_writer :service_format
+      
+      def as_hash(object)
+        object.respond_to?(:serializable_hash) ? object.serializable_hash : object
+      end
+      
       def service_format
         @service_format ||= DEFAULT_SERVICE_FORMAT
       end

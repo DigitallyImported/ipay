@@ -10,7 +10,6 @@ module IPay
   
     def initialize(data = {})
       @data = data
-      IPay.log.debug "Request Args: #{(@data.collect { |k, v| "#{k}=#{v}" }.join(','))}"
     
       CONFIG_GLOBALS.each do |key|
         next if @data.include?(key)
@@ -31,7 +30,7 @@ module IPay
     end
 
     protected
-
+    
     def do_post(api_url, data)
       IPay.log.info "POST to #{api_url}"
       IPay.log.info('Dry run enabled, not sending to API') and return if IPay.config.dry_run
