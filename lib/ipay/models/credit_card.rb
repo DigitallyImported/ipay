@@ -44,7 +44,7 @@ module IPay
             case(self.account_number[0...2].to_i)
             when 34, 37 then 'American Express'
             when 36, 38 then 'Diners'
-            when 51..55 then 'Master Card'
+            when 51..55 then 'MasterCard'
             else
               case(self.account_number[0].to_i)
               when 3 then 'JCB'

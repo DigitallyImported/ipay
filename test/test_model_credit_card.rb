@@ -31,7 +31,7 @@ class TestModelClient < Test::Unit::TestCase
 
     @card = IPay::CreditCard.new :account_number => '5100009999999997', :expiration => CC_EXP, :cvv => 123
     assert @card.valid?
-    assert_equal 'Master Card', @card.card_type
+    assert_equal 'MasterCard', @card.card_type
 
     @card = IPay::CreditCard.new :account_number => '370000999999990', :expiration => CC_EXP, :cvv => 123
     assert @card.valid?
