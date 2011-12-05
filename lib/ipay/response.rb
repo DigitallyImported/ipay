@@ -65,8 +65,8 @@ module IPay
         case(arc)
           when '03' then raise RequestError.new 'Invalid Merchant ID'
           
-          when '04' then raise FraudError.new desc
-          when '59' then raise FraudError.new desc
+          #when '04' then raise FraudError.new desc
+          #when '59' then raise FraudError.new desc
           
           when '01','02' then errors.add "Transaction Declined, please call #{desc}"
           when '05' then errors.add 'Transaction Declined'
@@ -91,6 +91,7 @@ module IPay
       end
       
       case(mrc)
+        when '00' then nil # OK
         when 'UP' then raise ServiceUnavailableError.new('System unavailable, retry')
         when 'SU' then raise ServiceUnavailableError.new('Unable to process at this time, retry')
         when 'IC' then raise RequestError.new('Missing or invalid Company Key')

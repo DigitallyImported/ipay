@@ -25,7 +25,8 @@ module IPay
       else
         [args[0].downcase.to_sym, args[1]]
       end
-      @errors[key] = msg
+      @errors[key] ||= []
+      @errors[key] << msg
     end
     
     def include?(key)
