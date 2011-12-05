@@ -1,5 +1,6 @@
 require 'ipay/model'
 require 'active_support/core_ext/enumerable'
+require 'digest/md5'
 
 module IPay
   class CreditCard < Model
@@ -20,6 +21,10 @@ module IPay
     
     def clean_number(number)
       number.gsub /\s|\-/, ''
+    end
+      
+    def ident
+      Digest::MD5.hexdigest("#{account_number[0...4]}-#{account_number[account_number.length-4..-1]}-#{expiration}")
     end
     
     def description
