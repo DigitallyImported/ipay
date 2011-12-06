@@ -20,13 +20,16 @@ module IPay
       File.expand_path(File.join(ROOT, 'config', CONFIG_NAME))
     end
   
-    def load_config_file
-      config = if File.readable?(config_file)
-        OpenStruct.new(YAML.load_file(config_file)[ENV])
-      else
-        OpenStruct.new
+    def load_config_file(file = nil)
+      raise "Cannot load configuration file '#{file}'" if file and !File.readable?(file)
+      
+      file ||= config_file
+      begin
+        config = OpenStruct.new(YAML.load_file(file)[ENV])
+      rescue Errno::ENOENT
+        config = OpenStruct.new
       end
-    
+      
       set_defaults(config)
     end
     
@@ -39,8 +42,8 @@ module IPay
       config
     end
 
-    def config
-      @config ||= load_config_file
+    def config(file = nil)
+      @config ||= load_config_file(file)
       yield @config if block_given?
       @config
     end

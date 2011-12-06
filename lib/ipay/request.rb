@@ -24,14 +24,16 @@ module IPay
       @xml
     end
 
-    def send
+    def send_request
       raise RequestError.new('No iPay API url was specified in your configuration') unless IPay.config.url
-      do_post(IPay.config.url, @xml)
+      retryable(:tries => IPay.config.retries, :on => RetryRequest) do
+        Response.new post(IPay.config.url, @xml)
+      end
     end
 
     protected
     
-    def do_post(api_url, data)
+    def post(api_url, data)
       IPay.log.info "POST to #{api_url}"
       IPay.log.info('Dry run enabled, not sending to API') and return if IPay.config.dry_run
       

@@ -34,11 +34,7 @@ module IPay
         m = eval("#{self.service}")
         data = m::default_values(data) if m::respond_to?(:default_values)
       
-        request = Request.new(data)
-      
-        retryable(:tries => IPay.config.retries, :on => RetryRequest) do
-          Response.new request.send
-        end
+        Request.new(data).send_request
       end 
     
     end # self
