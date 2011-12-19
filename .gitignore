@@ -2,5 +2,6 @@
 .DS_Store
 *.gem
 *.xml
-config
-log
+config/
+log/
+*.sublime*

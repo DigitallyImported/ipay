@@ -63,13 +63,14 @@ module IPay
       
       unless arc == 'ER' # denotes MRC related error, skip ARC
         case(arc)
+          when '00' then nil # OK  
           when '03' then raise RequestError.new 'Invalid Merchant ID'
           
           #when '04' then raise FraudError.new desc
           #when '59' then raise FraudError.new desc
           
           when '01','02' then errors.add "Transaction Declined, please call #{desc}"
-          when '05' then errors.add 'Transaction Declined'
+          when '05' then errors.add 'Transaction Declined: Do Not Honor'
           when '51' then errors.add 'Transaction Declined: Insufficient funds'
           when '51' then errors.add 'Transaction Declined: Card Expired'
           when '61' then errors.add 'Transaction Declined: Exceeds withdrawal limit'
@@ -89,7 +90,7 @@ module IPay
           else errors.add "Transaction Declined: (#{mrc}-#{arc} -- #{desc})"
         end
       end
-      
+
       case(mrc)
         when '00' then nil # OK
         when 'UP' then raise ServiceUnavailableError.new('System unavailable, retry')
@@ -116,7 +117,8 @@ module IPay
         when 'XE' then errors.add 'Currencery conversion error'
         else errors.add "Error processing transaction: (#{mrc}-#{arc} -- #{desc})"
       end
-      
+
+      IPay.log.warn errors.to_a
     end
   
     def xml_node_to_hash(node)
