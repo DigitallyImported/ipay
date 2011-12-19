@@ -4,7 +4,7 @@ require 'ipay/util'
 
 module IPay
   class Response
-    
+
     PARSER_OPT = XML::Parser::Options::NOBLANKS | XML::Parser::Options::NOERROR | XML::Parser::Options::RECOVER | XML::Parser::Options::NOWARNING
     
     attr_reader :status, :server_time, :data, :raw_xml
@@ -25,7 +25,15 @@ module IPay
     def error?
       not success?
     end
-    
+
+    def error_type
+      if @status[:arc] != '00' and @status[:arc] != 'ER'
+        :authorization
+      else
+        :service
+      end
+    end
+
     def errors
       @errors ||= Errors.new
     end
@@ -42,7 +50,7 @@ module IPay
       Certification.log(parsed) if IPay.config.certification
     
       response = xml_node_to_hash(parsed.find('//RESPONSE/RESPONSE/FIELDS')[0])
-      raise ResponseError.new 'Invalid response from server' unless response and response.include? :arc
+      raise ResponseError.new 'Invalid response from server' unless response and response.include? :mrc
       
       if response.include?(:local_date)
         d = response.delete(:local_date).match(/([0-9]{2})([0-9]{2})([0-9]{4})/)
@@ -56,10 +64,10 @@ module IPay
       IPay.log.info "ARC=#{@status[:arc]}, MRC=#{@status[:mrc]}, RESPONSE_TEXT=#{@status[:description]}"
       IPay.log.debug response
       
-      process_errors(@status[:mrc], @status[:arc], @status[:description]) unless success?
+      process_errors(@status[:arc], @status[:mrc], @status[:description]) unless success?
     end
   
-    def process_errors(mrc, arc, desc)
+    def process_errors(arc, mrc, desc)
       
       unless arc == 'ER' # denotes MRC related error, skip ARC
         case(arc)
@@ -87,7 +95,7 @@ module IPay
           when 'Z3' then raise RetryRequest.new desc
           when 'TO' then raise RequestTimeout.new desc
                       
-          else errors.add "Transaction Declined: (#{mrc}-#{arc} -- #{desc})"
+          else errors.add "Transaction Declined: (#{arc}#{mrc} -- #{desc})"
         end
       end
 
@@ -115,7 +123,7 @@ module IPay
         when 'TV' then errors.add 'Transaction already void'
         when 'VR' then errors.add 'Void Refused'
         when 'XE' then errors.add 'Currencery conversion error'
-        else errors.add "Error processing transaction: (#{mrc}-#{arc} -- #{desc})"
+        else errors.add "Error processing transaction: (#{arc}#{mrc} -- #{desc})"
       end
 
       IPay.log.warn errors.to_a
