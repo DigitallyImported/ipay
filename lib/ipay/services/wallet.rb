@@ -5,6 +5,8 @@ module IPay
         
     def self.default_values(data)
       {
+        :currency_code => IPay.config.defaults[:currency_code],
+        :currency_indicator => IPay.config.defaults[:currency_indicator],
         :transaction_indicator => IPay.config.defaults[:transaction_indicator]
       }.merge(data)
     end
@@ -13,8 +15,9 @@ module IPay
       self.service_format = '1010'
       class << self
         
-        def insert(client, account, txn_type = BILLING_TXN_AVS)
+        def insert(client, account, txn_type = BILLING_TXN_AVS, payment_data = nil)
           data = {:billing_transaction => txn_type}.merge( as_hash(client).merge as_hash(account) )
+          data.merge! payment_data if payment_data
           send_request data
         end
 
@@ -34,8 +37,10 @@ module IPay
       self.service_format = '1010'
       class << self
       
-        def insert(client_id, account, txn_type = BILLING_TXN_AVS)
-          send_request as_hash(account).merge :billing_transaction => txn_type, :client_id => client_id
+        def insert(client_id, account, txn_type = BILLING_TXN_AVS, payment_data = nil)
+          data = as_hash(account).merge :billing_transaction => txn_type, :client_id => client_id
+          data.merge! payment_data if payment_data
+          send_request data
         end
 
         def modify(account_id, account)
