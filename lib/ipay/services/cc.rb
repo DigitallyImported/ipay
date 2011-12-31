@@ -49,8 +49,8 @@ module IPay
            send_request :transaction_id => txn_id
         end
       
-        def reversal(data)
-          send_request data
+        def reversal(txn_id, amount)
+          send_request :transaction_id => txn_id, :amount => amount
         end
         
       end
