@@ -47,13 +47,12 @@ module IPay
     
     def full_messages
       @errors.inject([]) do |ret, a|
-        ret <<
+        ret +=
         if a[0] == :base
           a[1]
         else
-          "#{humanized(a[0])} #{a[1]}"
+          a[1].collect { |e| "#{humanized(a[0])} #{e}" }
         end
-        ret
       end
     end
     

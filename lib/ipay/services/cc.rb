@@ -14,8 +14,8 @@ module IPay
       self.service_format = '1010'
       class << self
         
-        def refund(data)
-          send_request data
+        def refund(txn_id, amount)
+          send_request :transaction_id => txn_id, :amount => amount
         end
 
         def void(txn_id)
