@@ -20,11 +20,16 @@ module IPay
     end
     
     def clean_number(number)
-      number.gsub /\s|\-/, ''
+      number.gsub(/\s|\-/, '')
     end
-      
+    
+    def iin
+      self.account_number[0...6]
+    end
+    alias_method :bin, :iin
+
     def ident
-      Digest::MD5.hexdigest("#{account_number[0...4]}-#{account_number[account_number.length-4..-1]}-#{expiration}")
+      Digest::MD5.hexdigest("#{iin}-#{account_number[account_number.length-4..-1]}-#{expiration}")
     end
     
     def description
