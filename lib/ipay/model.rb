@@ -28,6 +28,14 @@ module IPay
       super *m
     end
     
+    def merge(data)
+      self.serializable_hash.merge data
+    end
+
+    def merge!(data)
+      self.attributes.merge! data
+    end
+
   protected
     def run_validations!
       @skip_validations ? true : super

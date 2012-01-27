@@ -31,8 +31,8 @@ module IPay
         data[:service_subtype] = service_subtype.nil? ? caller[0][/`.*'/][1..-2].upcase : service_subtype.to_s.upcase
         data[:service_format] ||= self.service_format
     
-        m = eval("#{self.service}")
-        data = m::default_values(data) if m::respond_to?(:default_values)
+        m = Object.const_get('IPay').const_get(self.service)
+        data.merge! m::default_values if m::respond_to?(:default_values)
       
         Request.new(data).send_request
       end 

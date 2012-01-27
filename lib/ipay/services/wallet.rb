@@ -3,12 +3,12 @@ require 'ipay/api_request'
 module IPay
   module Wallet
         
-    def self.default_values(data)
+    def self.default_values
       {
         :currency_code => IPay.config.defaults[:currency_code],
         :currency_indicator => IPay.config.defaults[:currency_indicator],
         :transaction_indicator => IPay.config.defaults[:transaction_indicator]
-      }.merge(data)
+      }
     end
   
     class Client < ApiRequest
