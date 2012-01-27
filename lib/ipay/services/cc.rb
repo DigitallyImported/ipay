@@ -34,8 +34,8 @@ module IPay
           send_request data
         end
 
-        def capture(data)
-          send_request data
+        def capture(txn_id, amount)
+          send_request :transaction_id => txn_id, :amount => amount
         end
 
         def sale(data)
