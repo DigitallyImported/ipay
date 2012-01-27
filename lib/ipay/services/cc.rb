@@ -2,12 +2,12 @@ require 'ipay/api_request'
 
 module IPay
   module CC
-    def self.default_values(data)
+    def self.default_values
       {
         :currency_code => IPay.config.defaults[:currency_code],
         :currency_indicator => IPay.config.defaults[:currency_indicator],
         :transaction_indicator => IPay.config.defaults[:transaction_indicator]
-      }.merge(data)
+      }
     end
     
     class Credit < ApiRequest
@@ -34,8 +34,8 @@ module IPay
           send_request data
         end
 
-        def capture(data)
-          send_request data
+        def capture(txn_id, amount)
+          send_request :transaction_id => txn_id, :amount => amount
         end
 
         def sale(data)

@@ -9,10 +9,13 @@ module IPay
   
   autoload :Certification,  'ipay/certification'
   
-  autoload :CC,       'ipay/services/cc'
-  autoload :Wallet,   'ipay/services/wallet'
-  autoload :Currency, 'ipay/services/currency'
-  autoload :Network,  'ipay/services/network'
+  autoload :CC,         'ipay/services/cc'
+  autoload :Wallet,     'ipay/services/wallet'
+  autoload :Currency,   'ipay/services/currency'
+  autoload :Network,    'ipay/services/network'
+  autoload :Repository, 'ipay/services/repository'
+  autoload :Template,   'ipay/services/template'
+  autoload :Recurring,  'ipay/services/recurring'
   
   autoload :Client,     'ipay/models/client'
   autoload :CreditCard, 'ipay/models/credit_card'
