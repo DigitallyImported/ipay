@@ -47,15 +47,22 @@ module IPay
       store = OpenSSL::X509::Store.new
       store.set_default_paths
       http.cert_store = store
+
+      # set some timeouts
+      http.open_timeout  = 60 # this blocks forever by default, lets be a bit less crazy.
+      http.read_timeout  = IPay.config.timeout
+      http.ssl_timeout   = IPay.config.timeout
       
       req = Net::HTTP::Post.new(url.path, 'User-Agent' => "AudioAddict/iPay v#{IPay::VERSION}")
       res = http.start { |http| http.request(req, data) }
 
       res.body
       
-      rescue EOFError, Errno::ECONNREFUSED, Errno::ECONNRESET => e
-        IPay.log.error e
-        raise ServiceUnavailableError.new("Unable to send your request or the request was rejected by the server: #{e}")
+    rescue Timeout::Error
+      raise RetryRequest.new 'Request timed out'
+    rescue EOFError, Errno::ECONNREFUSED, Errno::ECONNRESET => e
+      IPay.log.error e
+      raise ServiceUnavailableError.new("Unable to send your request or the request was rejected by the server: #{e}")
     end
 
     def build_xml(fields_xml)      
