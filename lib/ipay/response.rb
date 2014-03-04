@@ -12,6 +12,7 @@ module IPay
     def initialize(xml)
       if IPay.config.dry_run
         @status = {:arc => '00', :mrc => '00', :description => 'Dry Run, no response processed'}
+        @data = {}
       else
         @raw_xml = xml
         parse_response @raw_xml
